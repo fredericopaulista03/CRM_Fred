@@ -94,7 +94,9 @@
                 <!-- Leads por Estágio -->
                 <div class="bg-dark-800 p-6 rounded-xl border border-dark-700">
                     <h3 class="text-xl font-bold mb-4">Leads por Estágio</h3>
-                    <canvas id="statusChart" class="w-full" height="180px"></canvas>
+                    <div style="height: 250px; position: relative;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Distribuição de Score -->
