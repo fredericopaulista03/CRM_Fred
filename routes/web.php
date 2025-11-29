@@ -13,7 +13,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AdminController::class, 'authenticate'])->name('authenticate');
     
     Route::middleware(AdminAuth::class)->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('kanban');
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/kanban', [AdminController::class, 'kanban'])->name('kanban');
         Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::get('/leads/{id}', [AdminController::class, 'show'])->name('show');
         Route::patch('/leads/{id}/status', [AdminController::class, 'updateStatus'])->name('updateStatus');

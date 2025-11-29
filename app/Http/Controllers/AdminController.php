@@ -8,7 +8,24 @@ use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function dashboard()
+    {
+        if (!Session::get('admin_logged_in')) {
+            return redirect()->route('admin.login');
+        }
+
+        $totalLeads = Lead::count();
+        $leadsByStatus = Lead::selectRaw('kanban_status, COUNT(*) as count')
+            ->groupBy('kanban_status')
+            ->pluck('count', 'kanban_status');
+        
+        $recentLeads = Lead::orderBy('created_at', 'desc')->take(5)->get();
+        $avgScore = Lead::avg('score');
+        
+        return view('admin.dashboard', compact('totalLeads', 'leadsByStatus', 'recentLeads', 'avgScore'));
+    }
+
+    public function kanban()
     {
         if (!Session::get('admin_logged_in')) {
             return redirect()->route('admin.login');
@@ -40,7 +57,7 @@ class AdminController extends Controller
         // Hardcoded credentials as requested
         if ($credentials['email'] === 'admin@example.com' && $credentials['password'] === 'admin123') {
             Session::put('admin_logged_in', true);
-            return redirect()->route('admin.kanban');
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials']);
