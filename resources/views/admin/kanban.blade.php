@@ -26,7 +26,7 @@
                 <div class="p-4 border-b border-dark-700 flex justify-between items-center">
                     <h3 class="font-bold text-lg">{{ $status }}</h3>
                     <span class="bg-dark-700 text-xs px-2 py-1 rounded-full text-gray-400">
-                        {{ $leads[$status]->count() ?? 0 }}
+                        {{ isset($leads[$status]) ? $leads[$status]->count() : 0 }}
                     </span>
                 </div>
 
