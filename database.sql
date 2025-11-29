@@ -1,0 +1,21 @@
+CREATE TABLE `leads` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `instagram` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `branch` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revenue_raw` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revenue_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `investment_raw` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `investment_category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `objective` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `has_traffic` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ai_tags` json DEFAULT NULL,
+  `score` int(11) NOT NULL DEFAULT '0',
+  `urgency` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `kanban_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Frio',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
