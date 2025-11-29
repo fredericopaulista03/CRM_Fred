@@ -36,8 +36,36 @@
             }
         }
     </script>
+    
+    @php
+        $gaId = App\Models\Setting::get('google_analytics');
+        $gtmHead = App\Models\Setting::get('gtm_head');
+    @endphp
+    
+    @if($gaId)
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ $gaId }}');
+    </script>
+    @endif
+    
+    @if($gtmHead)
+    {!! $gtmHead !!}
+    @endif
 </head>
 <body class="bg-dark-900 text-white antialiased min-h-screen flex flex-col">
+    @php
+        $gtmBody = App\Models\Setting::get('gtm_body');
+    @endphp
+    
+    @if($gtmBody)
+    {!! $gtmBody !!}
+    @endif
+    
     @yield('content')
 </body>
 </html>
