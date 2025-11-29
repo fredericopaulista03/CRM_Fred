@@ -31,4 +31,11 @@ class Page extends Model
             }
         });
     }
+
+    public function questions()
+    {
+        return $this->belongsToMany(QuizQuestion::class, 'page_quiz_question')
+            ->withPivot('order')
+            ->orderBy('page_quiz_question.order');
+    }
 }
