@@ -19,14 +19,22 @@ class QuizConfigController extends Controller
             'question_text' => 'required|string',
             'field_name' => 'required|string',
             'input_type' => 'required|in:text,select,radio,email,tel',
-            'options' => 'nullable|array',
+            'options_text' => 'nullable|string',
             'placeholder' => 'nullable|string',
             'order' => 'required|integer',
             'is_active' => 'boolean',
             'is_required' => 'boolean',
         ]);
 
-        QuizQuestion::create($validated);
+        $data = $validated;
+        if (!empty($data['options_text'])) {
+            $data['options'] = array_filter(array_map('trim', explode("\n", $data['options_text'])));
+        } else {
+            $data['options'] = null;
+        }
+        unset($data['options_text']);
+
+        QuizQuestion::create($data);
 
         return redirect()->route('admin.quiz-config')->with('success', 'Pergunta criada com sucesso!');
     }
@@ -39,14 +47,22 @@ class QuizConfigController extends Controller
             'question_text' => 'required|string',
             'field_name' => 'required|string',
             'input_type' => 'required|in:text,select,radio,email,tel',
-            'options' => 'nullable|array',
+            'options_text' => 'nullable|string',
             'placeholder' => 'nullable|string',
             'order' => 'required|integer',
             'is_active' => 'boolean',
             'is_required' => 'boolean',
         ]);
 
-        $question->update($validated);
+        $data = $validated;
+        if (!empty($data['options_text'])) {
+            $data['options'] = array_filter(array_map('trim', explode("\n", $data['options_text'])));
+        } else {
+            $data['options'] = null;
+        }
+        unset($data['options_text']);
+
+        $question->update($data);
 
         return redirect()->route('admin.quiz-config')->with('success', 'Pergunta atualizada com sucesso!');
     }

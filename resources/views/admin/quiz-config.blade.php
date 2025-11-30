@@ -180,7 +180,6 @@
                 <div x-show="form.input_type === 'select' || form.input_type === 'radio'">
                     <label class="block text-sm font-medium mb-2">Opções (uma por linha)</label>
                     <textarea name="options_text" x-model="optionsText" rows="4" class="w-full p-3 bg-dark-700 border border-dark-600 rounded-lg focus:border-blue-500 outline-none" placeholder="Opção 1&#10;Opção 2&#10;Opção 3"></textarea>
-                    <input type="hidden" name="options[]" :value="optionsText.split('\n').filter(o => o.trim())">
                 </div>
 
                 <div>
