@@ -17,6 +17,28 @@ class GeminiService
 
     public function analyzeLead(array $data)
     {
+        // Extract custom data if present
+        $customData = $data['custom_data'] ?? [];
+        unset($data['custom_data']); // Remove from main array to avoid duplication if merged
+
+        // Merge custom data into main data for easier access, but keep original keys if they exist
+        $mergedData = array_merge($customData, $data);
+
+        $revenue = $mergedData['revenue_raw'] ?? 'Não informado';
+        $investment = $mergedData['investment_raw'] ?? 'Não informado';
+        $branch = $mergedData['branch'] ?? 'Não informado';
+        $objective = $mergedData['objective'] ?? 'Não informado';
+        $hasTraffic = $mergedData['has_traffic'] ?? 'Não informado';
+        $instagram = $mergedData['instagram'] ?? 'Não informado';
+
+        // Format other custom fields for the prompt
+        $otherFields = "";
+        foreach ($customData as $key => $value) {
+            if (!in_array($key, ['revenue_raw', 'investment_raw', 'branch', 'objective', 'has_traffic', 'instagram'])) {
+                $otherFields .= "{$key}: {$value}\n";
+            }
+        }
+
         $prompt = "Você é um assistente de qualificação de leads para uma agência de tráfego pago. Receba as respostas abaixo e devolva um JSON contendo:
         faturamento_categoria (0-10k, 10-50k, 50-200k, 200k+)
         invest_categoria (1k, 3k, 5k, 10k, 10k+)
@@ -27,12 +49,15 @@ class GeminiService
         Responda apenas com JSON puro.
 
         Dados do lead:
-        Faturamento: {$data['revenue_raw']}
-        Investimento: {$data['investment_raw']}
-        Ramo: {$data['branch']}
-        Objetivo: {$data['objective']}
-        Já faz tráfego: {$data['has_traffic']}
-        Instagram: {$data['instagram']}
+        Faturamento: {$revenue}
+        Investimento: {$investment}
+        Ramo: {$branch}
+        Objetivo: {$objective}
+        Já faz tráfego: {$hasTraffic}
+        Instagram: {$instagram}
+        
+        Outras informações:
+        {$otherFields}
         ";
 
         try {
