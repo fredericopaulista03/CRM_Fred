@@ -121,6 +121,19 @@
                 </div>
 
                 <div>
+                    <label class="block text-sm font-medium mb-2">Perguntas do Quiz</label>
+                    <div class="space-y-2 max-h-60 overflow-y-auto p-3 bg-dark-700 rounded-lg border border-dark-600">
+                        @foreach($allQuestions as $question)
+                        <label class="flex items-center gap-3 p-2 hover:bg-dark-600 rounded cursor-pointer">
+                            <input type="checkbox" name="questions[]" value="{{ $question->id }}" x-model="form.questions" class="w-5 h-5 rounded bg-dark-800 border-dark-500 text-blue-600 focus:ring-blue-500">
+                            <span class="text-sm">{{ $question->order }}. {{ $question->question_text }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Selecione as perguntas que aparecerão nesta página.</p>
+                </div>
+
+                <div>
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" name="is_active" x-model="form.is_active" value="1" class="w-5 h-5 rounded bg-dark-700 border-dark-600">
                         <span class="text-sm">Página Ativa (visível publicamente)</span>
@@ -149,7 +162,8 @@
                 title: '',
                 slug: '',
                 description: '',
-                is_active: true
+                is_active: true,
+                questions: []
             },
             openModal() {
                 this.showModal = true;
@@ -165,7 +179,8 @@
                     title: page.title,
                     slug: page.slug,
                     description: page.description || '',
-                    is_active: page.is_active
+                    is_active: page.is_active,
+                    questions: page.questions ? page.questions.map(q => q.id.toString()) : []
                 };
                 this.showModal = true;
             },
@@ -174,7 +189,8 @@
                     title: '',
                     slug: '',
                     description: '',
-                    is_active: true
+                    is_active: true,
+                    questions: []
                 };
             }
         }

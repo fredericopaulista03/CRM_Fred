@@ -45,3 +45,4 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // API for quiz questions
 Route::get('/api/quiz-questions', [QuizConfigController::class, 'getQuestions']);
+Route::get('/api/quiz/{slug}/questions', [PageController::class, 'getQuestions']);

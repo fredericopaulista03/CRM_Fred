@@ -72,7 +72,7 @@
             },
             async init() {
                 // Load questions from API
-                const response = await fetch('/api/quiz-questions');
+                const response = await fetch('/api/quiz/{{ $page->slug }}/questions');
                 this.questions = await response.json();
                 this.totalSteps = this.questions.length;
                 

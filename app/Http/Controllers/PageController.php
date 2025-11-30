@@ -11,7 +11,7 @@ class PageController extends Controller
 {
     public function index()
     {
-        $pages = Page::withCount('questions')->orderBy('created_at', 'desc')->get();
+        $pages = Page::with('questions')->orderBy('created_at', 'desc')->get();
         $allQuestions = QuizQuestion::where('is_active', true)->orderBy('order')->get();
         return view('admin.pages', compact('pages', 'allQuestions'));
     }
