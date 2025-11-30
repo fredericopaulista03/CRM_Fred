@@ -24,6 +24,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
         Route::get('/leads/{id}', [AdminController::class, 'show'])->name('show');
         Route::patch('/leads/{id}/status', [AdminController::class, 'updateStatus'])->name('updateStatus');
+        Route::post('/leads/{id}/reanalyze', [AdminController::class, 'reanalyze'])->name('reanalyze');
         
         // Pages Management
         Route::get('/pages', [PageController::class, 'index'])->name('pages');

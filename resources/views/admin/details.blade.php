@@ -12,6 +12,18 @@
         <div class="p-8 max-w-5xl mx-auto w-full">
             <a href="{{ route('admin.kanban') }}" class="text-gray-400 hover:text-white mb-6 inline-block">← Voltar para Kanban</a>
             
+            @if(session('success'))
+            <div class="mb-6 p-4 bg-green-900/30 border border-green-900/50 rounded-lg text-green-200">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="mb-6 p-4 bg-red-900/30 border border-red-900/50 rounded-lg text-red-200">
+                {{ session('error') }}
+            </div>
+            @endif
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Main Info -->
                 <div class="md:col-span-2 space-y-6">
@@ -108,9 +120,12 @@
                     <div class="bg-dark-800 p-6 rounded-xl border border-dark-700">
                         <h3 class="font-bold mb-4">Reanalisar</h3>
                         <p class="text-sm text-gray-400 mb-4">Se achar que a classificação está incorreta, você pode pedir para a IA analisar novamente.</p>
-                        <button class="block w-full py-3 border border-dark-600 hover:bg-dark-700 text-gray-300 text-center rounded-lg font-medium transition-colors">
-                            Reanalisar com IA
-                        </button>
+                        <form action="{{ route('admin.reanalyze', $lead->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="block w-full py-3 border border-dark-600 hover:bg-dark-700 text-gray-300 text-center rounded-lg font-medium transition-colors">
+                                Reanalisar com IA
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

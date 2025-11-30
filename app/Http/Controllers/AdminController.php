@@ -81,4 +81,41 @@ class AdminController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function reanalyze($id, \App\Services\GeminiService $geminiService)
+    {
+        if (!Session::get('admin_logged_in')) {
+            return redirect()->route('admin.login');
+        }
+
+        $lead = Lead::findOrFail($id);
+        
+        // Prepare data for analysis
+        $data = $lead->toArray();
+        
+        $analysis = $geminiService->analyzeLead($data);
+
+        if ($analysis) {
+            $lead->update([
+                'revenue_category' => $analysis['faturamento_categoria'] ?? null,
+                'investment_category' => $analysis['invest_categoria'] ?? null,
+                'ai_tags' => $analysis['tags_ai'] ?? [],
+                'score' => $analysis['score_potencial'] ?? 0,
+                'urgency' => $analysis['urgencia'] ?? 'baixa',
+                'kanban_status' => $this->determineKanbanStatus($analysis['faturamento_categoria'] ?? '0-10k'),
+            ]);
+            
+            return back()->with('success', 'Lead reanalisado com sucesso!');
+        }
+
+        return back()->with('error', 'Falha ao reanalisar lead. Verifique a chave da API.');
+    }
+
+    private function determineKanbanStatus($revenueCategory)
+    {
+        if (str_contains($revenueCategory, '200k+')) return 'Ultra Quente';
+        if (str_contains($revenueCategory, '50-200k')) return 'Quente';
+        if (str_contains($revenueCategory, '10-50k')) return 'Morno';
+        return 'Frio';
+    }
 }
