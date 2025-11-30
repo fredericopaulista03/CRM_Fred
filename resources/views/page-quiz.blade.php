@@ -48,6 +48,20 @@
                 </div>
             </template>
 
+            <!-- Contact Form Step -->
+            <div x-show="step === totalSteps" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-10" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-10" class="absolute inset-0">
+                <h2 class="text-3xl font-bold mb-6">Quase lá! Seus dados para contato:</h2>
+                <div class="space-y-6">
+                    <input type="text" x-model="form.name" class="w-full p-4 bg-transparent border-b-2 border-dark-600 focus:border-white outline-none text-xl placeholder-dark-600 transition-colors" placeholder="Seu nome" required>
+                    <input type="email" x-model="form.email" class="w-full p-4 bg-transparent border-b-2 border-dark-600 focus:border-white outline-none text-xl placeholder-dark-600 transition-colors" placeholder="Seu email" required>
+                    <input type="tel" x-model="form.phone" class="w-full p-4 bg-transparent border-b-2 border-dark-600 focus:border-white outline-none text-xl placeholder-dark-600 transition-colors" placeholder="Seu telefone (WhatsApp)" required>
+                </div>
+                <button type="submit" class="mt-8 w-full px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-colors text-lg" :disabled="loading">
+                    <span x-show="!loading">Finalizar e Receber Análise</span>
+                    <span x-show="loading">Analisando com IA...</span>
+                </button>
+            </div>
+
             <!-- Success Message -->
             <div x-show="step === totalSteps + 1" x-cloak class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <div class="text-5xl mb-4">✨</div>
@@ -66,7 +80,11 @@
             totalSteps: 0,
             loading: false,
             questions: [],
-            form: {},
+            form: {
+                name: '',
+                email: '',
+                phone: ''
+            },
             get progress() {
                 return (this.step / this.totalSteps) * 100;
             },
@@ -74,7 +92,7 @@
                 // Load questions from API
                 const response = await fetch('/api/quiz/{{ $page->slug }}/questions');
                 this.questions = await response.json();
-                this.totalSteps = this.questions.length;
+                this.totalSteps = this.questions.length + 1; // +1 for contact form
                 
                 // Initialize form fields
                 this.questions.forEach(q => {
@@ -88,11 +106,14 @@
             nextStep() {
                 if (this.step < this.totalSteps) {
                     this.step++;
-                } else if (this.step === this.totalSteps) {
-                    this.submit();
                 }
             },
             async submit() {
+                if (!this.form.name || !this.form.email || !this.form.phone) {
+                    alert('Por favor, preencha todos os campos de contato.');
+                    return;
+                }
+
                 this.loading = true;
                 try {
                     const response = await fetch('/api/new-lead', {

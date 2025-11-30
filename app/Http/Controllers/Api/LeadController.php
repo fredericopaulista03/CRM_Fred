@@ -19,6 +19,7 @@ class LeadController extends Controller
 
     public function store(Request $request)
     {
+        // Validate standard fields
         $validated = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email',
@@ -31,6 +32,13 @@ class LeadController extends Controller
             'has_traffic' => 'nullable|string',
         ]);
 
+        // Capture all other fields as custom data
+        $allData = $request->all();
+        $standardFields = array_keys($validated);
+        $standardFields[] = '_token'; // Exclude token if present
+        
+        $customData = array_diff_key($allData, array_flip($standardFields));
+
         // Call Gemini AI
         $aiAnalysis = $this->geminiService->analyzeLead($validated);
 
@@ -41,6 +49,7 @@ class LeadController extends Controller
             'score' => $aiAnalysis['score_potencial'] ?? 0,
             'urgency' => $aiAnalysis['urgencia'] ?? 'baixa',
             'kanban_status' => $this->determineKanbanStatus($aiAnalysis['faturamento_categoria'] ?? '0-10k'),
+            'custom_data' => $customData,
         ]);
 
         $lead = Lead::create($leadData);

@@ -25,9 +25,11 @@ class Lead extends Model
         'score',
         'urgency',
         'kanban_status',
+        'custom_data',
     ];
 
     protected $casts = [
         'ai_tags' => 'array',
+        'custom_data' => 'array',
     ];
 }
