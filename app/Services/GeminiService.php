@@ -12,7 +12,7 @@ class GeminiService
 
     public function __construct()
     {
-        $this->apiKey = env('GEMINI_API_KEY');
+        $this->apiKey = \App\Models\Setting::get('gemini_api_key', env('GEMINI_API_KEY'));
     }
 
     public function analyzeLead(array $data)

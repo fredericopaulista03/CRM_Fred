@@ -13,6 +13,7 @@ class SettingsController extends Controller
             'google_analytics' => Setting::get('google_analytics', ''),
             'gtm_head' => Setting::get('gtm_head', ''),
             'gtm_body' => Setting::get('gtm_body', ''),
+            'gemini_api_key' => Setting::get('gemini_api_key', ''),
         ];
 
         return view('admin.settings', compact('settings'));
@@ -24,6 +25,7 @@ class SettingsController extends Controller
             'google_analytics' => 'nullable|string',
             'gtm_head' => 'nullable|string',
             'gtm_body' => 'nullable|string',
+            'gemini_api_key' => 'nullable|string',
         ]);
 
         foreach ($validated as $key => $value) {

@@ -20,6 +20,23 @@
 
             <form action="{{ route('admin.settings.update') }}" method="POST" class="max-w-4xl">
                 @csrf
+                
+                <!-- AI Configuration -->
+                <div class="bg-dark-800 p-6 rounded-xl border border-dark-700 mb-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span>✨</span> Configuração da IA (Gemini)
+                    </h3>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Chave da API (Gemini API Key)</label>
+                        <div class="flex gap-2">
+                            <input type="password" name="gemini_api_key" value="{{ $settings['gemini_api_key'] }}" class="flex-1 p-3 bg-dark-700 border border-dark-600 rounded-lg focus:border-blue-500 outline-none font-mono text-sm" placeholder="AIzaSy...">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">
+                            A chave será usada para analisar os leads. Se deixar em branco, o sistema tentará usar a chave do arquivo .env.
+                            <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 hover:underline">Gerar chave aqui</a>.
+                        </p>
+                    </div>
+                </div>
 
                 <!-- Google Analytics -->
                 <div class="bg-dark-800 p-6 rounded-xl border border-dark-700 mb-6">
